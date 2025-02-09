@@ -42,6 +42,10 @@ map("n", "<Tab>", "<cmd>bnext<CR>")
 map("n", "<S-Tab>", "<cmd>bprev<CR>")
 
 -- mappings for split
--- note: bd closes
-map("n", "<leader>v", "<cmd>vs<CR>")
-map("n", "<leader>h", "<cmd>split<CR>")
+vim.o.splitright = true
+
+-- open a vsplit and move cursor
+map("n", "<leader>v", "<cmd>vs<CR><C-w><C-l>")
+-- open a vsplit and open alpha
+map("n", "<leader>h", "<cmd>vs<CR><C-w><C-l><cmd>Alpha<CR><cmd>:BD #<CR>")
+
