@@ -9,7 +9,7 @@ return {
         "williamboman/mason-lspconfig.nvim",
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "rust_analyzer", "clangd", "pyright", "hls", "gopls", "html", "cssls" }
+                ensure_installed = { "lua_ls", "rust_analyzer", "clangd", "jedi_language_server", "gopls", "html", "cssls" }
             })
         end
     },
@@ -29,8 +29,7 @@ return {
                     }
                 }
             })
-            lspconfig.pyright.setup({})
-            lspconfig.hls.setup({})
+            lspconfig.jedi_language_server.setup({})
             lspconfig.gopls.setup({})
             lspconfig.html.setup({})
             lspconfig.cssls.setup({})
@@ -42,6 +41,8 @@ return {
             vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, {})
             vim.keymap.set({ 'n', 'v' }, '<leader>fc', vim.lsp.buf.format, {})
 
+            -- format on save
+            vim.cmd("autocmd BufWritePre * lua vim.lsp.buf.format()")
 
             vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
                 border = "rounded", -- You can also use "single", "double", "shadow", or custom characters
