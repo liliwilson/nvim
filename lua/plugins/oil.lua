@@ -33,7 +33,12 @@ return {
                     end,
 
                 },
+                ['<leader>P'] = "actions.preview",
+                ["<CR>"] = "actions.select",
+                ["-"] = "actions.parent",
+                ["_"] = "actions.open_cwd",
             },
+            use_default_keymaps = false
         })
 
         vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
