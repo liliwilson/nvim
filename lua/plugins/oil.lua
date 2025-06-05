@@ -36,9 +36,7 @@ return {
             },
         })
 
-
-
         vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-        vim.keymap.set("n", "<leader>v", "<CMD>vsplit<CR><CMD>Oil<CR>", { desc = "Open a vertical split in oil" })
+        vim.keymap.set("n", "<leader>h", "<CMD>vsplit<CR><CMD>Oil<CR>", { desc = "Open a vertical split in oil" })
     end
 }
