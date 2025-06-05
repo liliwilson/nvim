@@ -171,7 +171,7 @@ return {
             dashboard.button("e", "  new file", "<cmd>ene <CR>"),
             dashboard.button("ctrl p", "  find file", "<C-p>"),
             dashboard.button("spc f g", "  search", "<leader>fg"),
-            dashboard.button("spc s l", "󰦛  sessions", "<leader>sl"),
+            dashboard.button("o", "  oil", "<CMD>Oil<CR>"),
         }
 
         for _, v in ipairs(dashboard.section.buttons.val) do
