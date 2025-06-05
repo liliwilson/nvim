@@ -7,6 +7,7 @@ vim.cmd("set shiftwidth=4")
 vim.cmd("set nu rnu")
 
 vim.o.termguicolors = true
+vim.opt.cursorline = true
 
 -- folding settings
 vim.opt.foldmethod = "expr"
