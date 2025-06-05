@@ -48,4 +48,3 @@ vim.o.splitright = true
 map("n", "<leader>v", "<cmd>vs<CR><C-w><C-l>")
 -- open a vsplit and open alpha
 map("n", "<leader>h", "<cmd>vs<CR><C-w><C-l><cmd>Alpha<CR><cmd>:BD #<CR>")
-

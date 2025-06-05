@@ -2,6 +2,18 @@ return {
     {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.8',
+        lazy = true,
+        cmd = "Telescope",
+        keys = {
+            { "<C-p>" },
+            { "<leader>fg" },
+            { "<leader>fs" },
+            { "<leader>fr" },
+            { "<leader>fb" },
+            { "<leader>fe" },
+            { "<leader>fa" },
+            { "<leader>la" },
+        },
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             -- fzf settings!
@@ -52,10 +64,11 @@ return {
         },
         config = function()
             require("aerial").setup({
+                highlight_on_jump = false,
                 on_attach = function(bufnr)
-                    -- Jump forwards/backwards with '{' and '}'
-                    vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
-                    vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+                    -- Jump forwards/backwards with arrows
+                    vim.keymap.set("n", "<", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+                    vim.keymap.set("n", ">", "<cmd>AerialNext<CR>", { buffer = bufnr })
                 end,
             })
             -- toggle the aerial sidebar

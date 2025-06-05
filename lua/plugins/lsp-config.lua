@@ -1,6 +1,8 @@
 return {
     {
         "williamboman/mason.nvim",
+        lazy = true,
+        event = { "BufReadPre", "BufNewFile" },
         config = function()
             require("mason").setup({})
         end
@@ -37,15 +39,25 @@ return {
             -- SETTING UP KEYBINDINGS
             -- shift + K now shows more info of the thing you are hovering
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
+            -- shift + E for opening errors
+            vim.keymap.set('n', 'E', function()
+                vim.diagnostic.open_float()
+            end, {})
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
             vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, {})
             vim.keymap.set({ 'n', 'v' }, '<leader>fc', vim.lsp.buf.format, {})
+            vim.keymap.set({ 'n', 'v' }, '<leader>e', vim.diagnostic.open_float, {})
 
             -- format on save
             vim.cmd("autocmd BufWritePre * lua vim.lsp.buf.format()")
 
             vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-                border = "rounded", -- You can also use "single", "double", "shadow", or custom characters
+                border = "rounded",
+            })
+            vim.diagnostic.config({
+                float = {
+                    border = "rounded", -- "single", "double", "shadow", or custom
+                }
             })
         end
     }
