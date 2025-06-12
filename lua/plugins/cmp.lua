@@ -4,16 +4,7 @@ return {
         event = "InsertEnter",
         dependencies = {
             {
-                -- snippet plugin
                 "L3MON4D3/LuaSnip",
-                opts = { history = true, updateevents = "TextChanged,TextChangedI" },
-                config = function(_, opts)
-                    require("luasnip").config.set_config(opts)
-                    require("luasnip.loaders.from_snipmate").load()
-                    require("luasnip.loaders.from_snipmate").lazy_load({ paths = vim.g.snipmate_snippets_path or "" })
-                end,
-            },
-            { -- cmp sources plugins
                 "saadparwaiz1/cmp_luasnip",
                 "hrsh7th/cmp-nvim-lua",
                 "hrsh7th/cmp-nvim-lsp",
@@ -63,6 +54,7 @@ return {
                 sources = cmp.config.sources({
                     { name = "nvim_lsp" },
                     { name = "luasnip" }, -- For luasnip users.
+                    { name = "render-markdown" },
                 }, {
                     { name = "buffer" },
                 }),

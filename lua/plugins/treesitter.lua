@@ -8,7 +8,7 @@ return {
         local config = require("nvim-treesitter.configs")
         config.setup({
             -- Only pre-install the most commonly used ones
-            ensure_installed = { "lua", "rust", "python" },
+            ensure_installed = { "lua", "rust", "python", "markdown", "markdown_inline" },
             -- Other languages will be installed on-demand
             auto_install = true,
             highlight = { enable = true },
