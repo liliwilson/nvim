@@ -9,10 +9,11 @@ vim.cmd("set nu rnu")
 vim.o.termguicolors = true
 vim.opt.cursorline = true
 
--- folding settings
+-- -- folding settings
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldtext = ""
+vim.opt.foldlevelstart = 99
+-- vim.opt.foldtext = ""
 
 -- snippets
 vim.g.snipmate_snippets_path = "~/.config/nvim/snippets/"
