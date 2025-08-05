@@ -5,7 +5,7 @@ local resize_mode = false
 
 local function enter_resize_mode()
     resize_mode = true
-    print("-- RESIZE MODE -- (h/j/k/l to resize, <Esc> to exit)")
+    print("-- RESIZE MODE -- (h/j/k/l to resize, <Esc>/jk/kj to exit)")
 
     vim.keymap.set('n', 'h', function()
         if resize_mode then
@@ -67,7 +67,7 @@ local function enter_resize_mode()
         end
     end, { noremap = true, silent = true })
 
-    vim.keymap.set('n', '<Esc>', function()
+    local function exit_resize_mode()
         if resize_mode then
             resize_mode = false
             print("")
@@ -77,8 +77,14 @@ local function enter_resize_mode()
             vim.keymap.del('n', 'k')
             vim.keymap.del('n', 'j')
             vim.keymap.del('n', '<Esc>')
+            vim.keymap.del('n', 'jk')
+            vim.keymap.del('n', 'kj')
         end
-    end, { noremap = true, silent = true })
+    end
+
+    vim.keymap.set('n', '<Esc>', exit_resize_mode, { noremap = true, silent = true })
+    vim.keymap.set('n', 'jk', exit_resize_mode, { noremap = true, silent = true })
+    vim.keymap.set('n', 'kj', exit_resize_mode, { noremap = true, silent = true })
 end
 
 _G.enter_resize_mode = enter_resize_mode

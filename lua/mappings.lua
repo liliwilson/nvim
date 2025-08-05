@@ -11,6 +11,10 @@ vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>Alpha<cr>', { noremap = true, si
 
 local map = vim.keymap.set
 
+-- escape key alternatives
+map("i", "jk", "<Esc>")
+map("i", "kj", "<Esc>")
+
 -- easier to move around splits
 map("n", "<C-h>", "<C-w><C-h>")
 map("n", "<C-j>", "<C-w><C-j>")
