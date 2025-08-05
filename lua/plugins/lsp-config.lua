@@ -53,9 +53,19 @@ return {
             lspconfig.rust_analyzer.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
+                root_dir = require("lspconfig.util").root_pattern("Cargo.toml", ".git"),
                 settings = {
                     ["rust-analyzer"] = {
-                        linkedProjects = {},
+                        cargo = {
+                            allFeatures = false,
+                            autoreload = true,
+                        },
+                        check = {
+                            command = "check", -- or "clippy" if you're okay with slower saves
+                        },
+                        procMacro = {
+                            enable = false,
+                        },
                         workspace = {
                             symbol = {
                                 search = {
@@ -63,40 +73,57 @@ return {
                                 },
                             },
                         },
-                        procMacro = {
-                            server = "rust-analyzer",
-                        },
                     },
                 },
-                root_dir = function(fname)
-                    local cargo_toml = vim.fs.find('Cargo.toml', { path = fname, upward = true })[1]
-                    if cargo_toml then
-                        local cargo_dir = vim.fn.fnamemodify(cargo_toml, ':h')
-                        local cargo_contents = vim.fn.readfile(cargo_toml)
-                        for _, line in ipairs(cargo_contents) do
-                            if line:match('^%s*%[workspace%]') then
-                                return cargo_dir
-                            end
-                        end
-                        local workspace_root = vim.fs.find('Cargo.toml', {
-                            path = vim.fn.fnamemodify(cargo_dir, ':h'),
-                            upward = true,
-                            stop = vim.fn.expand('~')
-                        })
-                        for _, potential_root in ipairs(workspace_root) do
-                            local potential_contents = vim.fn.readfile(potential_root)
-                            for _, line in ipairs(potential_contents) do
-                                if line:match('^%s*%[workspace%]') then
-                                    return vim.fn.fnamemodify(potential_root, ':h')
-                                end
-                            end
-                        end
-                        return cargo_dir
-                    end
-                    return nil
-                end,
             })
 
+            -- lspconfig.rust_analyzer.setup({
+            --     on_attach = on_attach,
+            --     capabilities = capabilities,
+            --     settings = {
+            --         ["rust-analyzer"] = {
+            --             linkedProjects = {},
+            --             workspace = {
+            --                 symbol = {
+            --                     search = {
+            --                         scope = "workspace",
+            --                     },
+            --                 },
+            --             },
+            --             procMacro = {
+            --                 server = "rust-analyzer",
+            --             },
+            --         },
+            --     },
+            --     root_dir = function(fname)
+            --         local cargo_toml = vim.fs.find('Cargo.toml', { path = fname, upward = true })[1]
+            --         if cargo_toml then
+            --             local cargo_dir = vim.fn.fnamemodify(cargo_toml, ':h')
+            --             local cargo_contents = vim.fn.readfile(cargo_toml)
+            --             for _, line in ipairs(cargo_contents) do
+            --                 if line:match('^%s*%[workspace%]') then
+            --                     return cargo_dir
+            --                 end
+            --             end
+            --             local workspace_root = vim.fs.find('Cargo.toml', {
+            --                 path = vim.fn.fnamemodify(cargo_dir, ':h'),
+            --                 upward = true,
+            --                 stop = vim.fn.expand('~')
+            --             })
+            --             for _, potential_root in ipairs(workspace_root) do
+            --                 local potential_contents = vim.fn.readfile(potential_root)
+            --                 for _, line in ipairs(potential_contents) do
+            --                     if line:match('^%s*%[workspace%]') then
+            --                         return vim.fn.fnamemodify(potential_root, ':h')
+            --                     end
+            --                 end
+            --             end
+            --             return cargo_dir
+            --         end
+            --         return nil
+            --     end,
+            -- })
+            --
             vim.keymap.set('n', 'E', vim.diagnostic.open_float, {})
             vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, {})
 
