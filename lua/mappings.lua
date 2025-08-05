@@ -48,3 +48,52 @@ vim.o.splitright = true
 map("n", "<leader>v", "<cmd>vs<CR><C-w><C-l>")
 -- open a vsplit and open alpha
 map("n", "<leader>h", "<cmd>vs<CR><C-w><C-l><cmd>Alpha<CR><cmd>:BD #<CR>")
+
+-- Window resize mode
+local resize_mode = false
+
+local function enter_resize_mode()
+    resize_mode = true
+    print("-- RESIZE MODE -- (h/j/k/l to resize, <Esc> to exit)")
+
+    -- Temporary mappings for resize mode
+    vim.keymap.set('n', 'h', function()
+        if resize_mode then
+            vim.cmd('vertical resize -2')
+        end
+    end, { buffer = 0 })
+
+    vim.keymap.set('n', 'l', function()
+        if resize_mode then
+            vim.cmd('vertical resize +2')
+        end
+    end, { buffer = 0 })
+
+    vim.keymap.set('n', 'k', function()
+        if resize_mode then
+            vim.cmd('resize -2')
+        end
+    end, { buffer = 0 })
+
+    vim.keymap.set('n', 'j', function()
+        if resize_mode then
+            vim.cmd('resize +2')
+        end
+    end, { buffer = 0 })
+
+    vim.keymap.set('n', '<Esc>', function()
+        if resize_mode then
+            resize_mode = false
+            print("")
+            -- Remove the temporary mappings
+            vim.keymap.del('n', 'h', { buffer = 0 })
+            vim.keymap.del('n', 'l', { buffer = 0 })
+            vim.keymap.del('n', 'k', { buffer = 0 })
+            vim.keymap.del('n', 'j', { buffer = 0 })
+            vim.keymap.del('n', '<Esc>', { buffer = 0 })
+        end
+    end, { buffer = 0 })
+end
+
+-- Enter resize mode with <leader>w
+map("n", "<leader>w", enter_resize_mode)
