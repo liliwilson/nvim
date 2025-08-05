@@ -51,48 +51,82 @@ map("n", "<leader>h", "<cmd>vs<CR><C-w><C-l><cmd>Alpha<CR><cmd>:BD #<CR>")
 
 -- Window resize mode
 local resize_mode = false
-
 local function enter_resize_mode()
     resize_mode = true
     print("-- RESIZE MODE -- (h/j/k/l to resize, <Esc> to exit)")
 
-    -- Temporary mappings for resize mode
     vim.keymap.set('n', 'h', function()
         if resize_mode then
-            vim.cmd('vertical resize -2')
+            local current_win = vim.fn.winnr()
+            local leftmost_win = vim.fn.winnr('1h')
+
+            if leftmost_win == current_win then
+                -- This is the leftmost window, shrink it
+                vim.cmd('vertical resize -2')
+            else
+                -- There's a window to the left, grow this window
+                vim.cmd('vertical resize +2')
+            end
         end
-    end, { buffer = 0 })
+    end, { noremap = true, silent = true })
 
     vim.keymap.set('n', 'l', function()
         if resize_mode then
-            vim.cmd('vertical resize +2')
+            local current_win = vim.fn.winnr()
+            local leftmost_win = vim.fn.winnr('1h')
+
+            if leftmost_win == current_win then
+                -- This is the leftmost window, grow it
+                vim.cmd('vertical resize +2')
+            else
+                -- There's a window to the left, shrink this window
+                vim.cmd('vertical resize -2')
+            end
         end
-    end, { buffer = 0 })
+    end, { noremap = true, silent = true })
 
     vim.keymap.set('n', 'k', function()
         if resize_mode then
-            vim.cmd('resize -2')
+            local current_win = vim.fn.winnr()
+            local topmost_win = vim.fn.winnr('1k')
+
+            if topmost_win == current_win then
+                -- This is the topmost window, shrink it
+                vim.cmd('resize -2')
+            else
+                -- There's a window above, grow this window
+                vim.cmd('resize +2')
+            end
         end
-    end, { buffer = 0 })
+    end, { noremap = true, silent = true })
 
     vim.keymap.set('n', 'j', function()
         if resize_mode then
-            vim.cmd('resize +2')
+            local current_win = vim.fn.winnr()
+            local topmost_win = vim.fn.winnr('1k')
+
+            if topmost_win == current_win then
+                -- This is the topmost window, grow it
+                vim.cmd('resize +2')
+            else
+                -- There's a window above, shrink this window
+                vim.cmd('resize -2')
+            end
         end
-    end, { buffer = 0 })
+    end, { noremap = true, silent = true })
 
     vim.keymap.set('n', '<Esc>', function()
         if resize_mode then
             resize_mode = false
             print("")
             -- Remove the temporary mappings
-            vim.keymap.del('n', 'h', { buffer = 0 })
-            vim.keymap.del('n', 'l', { buffer = 0 })
-            vim.keymap.del('n', 'k', { buffer = 0 })
-            vim.keymap.del('n', 'j', { buffer = 0 })
-            vim.keymap.del('n', '<Esc>', { buffer = 0 })
+            vim.keymap.del('n', 'h')
+            vim.keymap.del('n', 'l')
+            vim.keymap.del('n', 'k')
+            vim.keymap.del('n', 'j')
+            vim.keymap.del('n', '<Esc>')
         end
-    end, { buffer = 0 })
+    end, { noremap = true, silent = true })
 end
 
 -- Enter resize mode with <leader>w
