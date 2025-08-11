@@ -53,7 +53,7 @@ return {
             lspconfig.rust_analyzer.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
-                root_dir = require("lspconfig.util").root_pattern("Cargo.toml", ".git"),
+                root_dir = require("lspconfig.util").root_pattern("Cargo.lock", ".git"),
                 settings = {
                     ["rust-analyzer"] = {
                         cargo = {
