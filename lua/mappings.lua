@@ -59,3 +59,6 @@ map("n", "<leader>w", function()
         _G.enter_resize_mode()
     end
 end)
+
+-- Toggle git blame with <leader>gb
+map("n", "<leader>gb", "<cmd>GitBlameToggle<CR>")
