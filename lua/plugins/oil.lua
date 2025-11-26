@@ -33,10 +33,11 @@ return {
                     end,
 
                 },
-                ['<leader>P'] = "actions.preview",
+                ['<leader>p'] = "actions.preview",
                 ["<CR>"] = "actions.select",
                 ["-"] = "actions.parent",
                 ["_"] = "actions.open_cwd",
+                ['g.'] = "actions.toggle_hidden"
             },
             use_default_keymaps = false
         })
