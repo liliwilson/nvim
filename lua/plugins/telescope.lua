@@ -13,14 +13,76 @@ return {
             { "<leader>fe" },
             { "<leader>fa" },
             { "<leader>la" },
+            { "<leader>fj" },
         },
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             -- fzf settings!
             local builtin = require('telescope.builtin')
+            local actions = require('telescope.actions')
+            local action_state = require('telescope.actions.state')
+            local previewers = require('telescope.previewers')
+            local from_entry = require('telescope.from_entry')
+            local conf = require('telescope.config').values
 
-            -- set ctrl+P to find files
-            vim.keymap.set('n', '<C-p>', builtin.find_files, {})
+            -- find_files wrapper: supports "filename:line" to preview/goto line
+            local function find_files_with_line()
+                local line_num = nil
+
+                local previewer = previewers.new_buffer_previewer({
+                    title = "File Preview",
+                    get_buffer_by_name = function(self, entry)
+                        return from_entry.path(entry, false)
+                    end,
+                    define_preview = function(self, entry, status)
+                        local p = from_entry.path(entry, true)
+                        if p == nil or p == "" then return end
+                        conf.buffer_previewer_maker(p, self.state.bufnr, {
+                            bufname = self.state.bufname,
+                            winid = self.state.winid,
+                            callback = function(bufnr)
+                                if line_num and line_num > 0 then
+                                    vim.schedule(function()
+                                        pcall(vim.api.nvim_win_set_cursor, self.state.winid, { line_num, 0 })
+                                    end)
+                                end
+                            end,
+                        })
+                    end,
+                })
+
+                builtin.find_files({
+                    previewer = previewer,
+                    on_input_filter_cb = function(prompt)
+                        local file, lnum = prompt:match("(.+):(%d+)$")
+                        if file and lnum then
+                            line_num = tonumber(lnum)
+                            return { prompt = file }
+                        end
+                        line_num = nil
+                        return { prompt = prompt }
+                    end,
+                    attach_mappings = function(prompt_bufnr, map)
+                        actions.select_default:replace(function()
+                            local selection = action_state.get_selected_entry()
+                            actions.close(prompt_bufnr)
+                            if selection then
+                                local p = selection.path or selection[1]
+                                vim.cmd("edit " .. vim.fn.fnameescape(p))
+                                if line_num then
+                                    local target = math.min(line_num, vim.api.nvim_buf_line_count(0))
+                                    vim.api.nvim_win_set_cursor(0, { target, 0 })
+                                    vim.cmd("normal! zz")
+                                end
+                            end
+                        end)
+                        return true
+                    end,
+                })
+            end
+
+            -- set ctrl+P to find files (with :line support)
+            vim.keymap.set('n', '<C-p>', find_files_with_line, {})
             -- set leader + fg to do live grep, right now this is space+fg
             vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
             -- set leader + fs to grep the currently selected thing
@@ -35,6 +97,8 @@ return {
             vim.keymap.set('n', "<Leader>fa", ":Telescope diagnostics<CR>", { noremap = true, silent = true })
             -- symbols
             vim.keymap.set('n', "<leader>la", ":Telescope aerial<CR>", { noremap = true, silent = true })
+            -- workspace symbols (LSP)
+            vim.keymap.set('n', "<leader>fj", builtin.lsp_workspace_symbols, {})
         end
     },
 
