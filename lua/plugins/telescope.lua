@@ -135,8 +135,8 @@ return {
                     vim.keymap.set("n", ">", "<cmd>AerialNext<CR>", { buffer = bufnr })
                 end,
             })
-            -- toggle the aerial sidebar
-            vim.keymap.set("n", "<leader>ls", "<cmd>AerialToggle!<CR>")
+            -- workspace symbols (LSP)
+            vim.keymap.set("n", "<leader>ls", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>")
         end
     }
 }
